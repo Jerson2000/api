@@ -7,9 +7,10 @@
 * jwt
 * error handling
 * send & validate otp based on the current session.
-* hhmmm
+* request validation using Zod
+* request rate limit
 
-## TECH
+## TECH ⚒
 * express
 * typeORM
 * nodemailer
@@ -17,11 +18,9 @@
 * multer 
 
 
-## TODOS (SHITTT TODOS 😭)
+## TODOS
 
-* validations using Zod
-* rate limiter
-* provides refresh token 
+* ~validations using Zod~
+* ~rate limiter~
+* Memory Caching with node-cache
 * and so on, I can't think of any rn fr fr
-
-## Feed me some suggestions ( make an issue huhu ) 🥺😞😭

@@ -5,12 +5,9 @@ import { IOTP, IUser } from "../model/types";
 import { encrypPassword, generateToken } from "../utils/auth-utils";
 import { compare } from "bcrypt";
 import { BadRequestException, ConflictException, ForbiddenException, NotFoundException } from "../exceptions/http-exception";
-import dotenv from 'dotenv';
 import nodemailer from "nodemailer";
 import { OTP } from "../model/otp-entity";
-
-dotenv.config();
-const env = process.env
+import { ENV_MAILER_HOSTNAME, ENV_MAILER_PASSWORD, ENV_MAILER_USERNAME } from "../utils/env-utils";
 
 export class UserRepository {
     private repo: Repository<Users>
@@ -143,7 +140,7 @@ export class UserRepository {
 
     private createEmailMessage(email: string, code: string) {
         return {
-            from: env.MAILER_USERNAME,
+            from: ENV_MAILER_USERNAME,
             to: email,
             subject: 'One time password',
             html: this.getEmailHtml(code)
@@ -237,12 +234,12 @@ export class UserRepository {
     }
 
     private transporter = nodemailer.createTransport({
-        host: env.MAILER_HOSTNAME,
+        host: ENV_MAILER_HOSTNAME,
         port: 587,
         secure: false,
         auth: {
-            user: env.MAILER_USERNAME,
-            pass: env.MAILER_PASSWORD,
+            user: ENV_MAILER_USERNAME,
+            pass: ENV_MAILER_PASSWORD,
         }
     })
 }

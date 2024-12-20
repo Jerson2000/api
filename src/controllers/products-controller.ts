@@ -1,11 +1,14 @@
 import { CustomRequest } from "../model/types"
 import { Response } from "express"
 import { ProductRepository } from "../repository/products-repository";
+import { BadRequestException } from "../exceptions/http-exception";
+import { ProductsValidation } from "../exceptions/validations";
 
 
 const repo = new ProductRepository();
 
 export const addProduct = async (req: CustomRequest, res: Response) => {
+    ProductsValidation.parse(req.body);
     const promise = await repo.addProduct(req.body)
     res.json(promise);
 }
@@ -27,13 +30,10 @@ export const updateProduct = async (req: CustomRequest, res: Response) => {
 
 export const addProductImages = async (req: CustomRequest, res: Response) => {
 
-    /**
-     * @todo prevent other files to be uploaded only mime type jpg/jpeg/png
-     *
-     * 
-     */
-   
     const files = req.files as Express.Multer.File[] | undefined;
+    if (!files && files === undefined) {
+        throw new BadRequestException("Provide product images!");
+    }
     const uploadedFiles = files.map(file => ({
         filename: file.filename,
         path: file.path,

@@ -1,11 +1,13 @@
 import { CustomRequest } from "../model/types"
 import { Response } from "express"
 import { CategoryRepository } from "../repository/category-repository";
+import { CategoryValidation } from "../exceptions/validations";
 
 
 const repo = new CategoryRepository();
 
 export const addCategory = async (req: CustomRequest, res: Response) => {
+    CategoryValidation.parse(req.body);
     const promise = await repo.addCategory(req.body)
     res.json(promise);
 }

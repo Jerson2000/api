@@ -1,13 +1,10 @@
 import * as jwt from 'jsonwebtoken';
 import { CustomRequest, IUser } from "../model/types"
 import { Response, NextFunction } from "express";
-import dotenv from 'dotenv'
 import { AppDataSource } from '../config/db-config';
 import { Users } from '../model/user-entity';
-import { HTTPException, UnauthorizedException } from '../exceptions/http-exception';
-
-dotenv.config();
-
+import { UnauthorizedException } from '../exceptions/http-exception';
+import { ENV_ACCESS_TOKEN } from '../utils/env-utils';
 
 const authMiddleware = async (req: CustomRequest, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
@@ -17,7 +14,7 @@ const authMiddleware = async (req: CustomRequest, res: Response, next: NextFunct
             return;
         }
 
-        const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET) as any;
+        const payload = jwt.verify(token, ENV_ACCESS_TOKEN) as any;
         const user = await AppDataSource.getRepository(Users).findOneBy({ id: payload.userId })
 
         if (!user) {

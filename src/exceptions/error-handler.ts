@@ -1,6 +1,7 @@
 import { CustomRequest } from "../model/types";
 import { Response, NextFunction } from "express";
-import { HTTPException, InternalException } from "./http-exception";
+import { BadRequestException, HTTPException, InternalException } from "./http-exception";
+import { ZodError } from "zod";
 
 
 
@@ -9,12 +10,14 @@ export const errorHandler = (method: Function) => {
         try {
             await method(req, res, next)
         } catch (error: any) {
-            console.log(error);
             let exception: HTTPException
             if (error instanceof HTTPException) {
                 exception = error
-            } else {
-                exception = new InternalException("Something went wrong!", { msg: error.message, error })
+            } else if (error instanceof ZodError) {
+                exception = new BadRequestException("Unprocessable Entity", error);
+            }
+            else {
+                exception = new InternalException("Something went wrong!", { message: error.message, error })
             }
 
             next(exception);
