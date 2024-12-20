@@ -19,9 +19,9 @@
 
 ## TODOS (SHITTT TODOS 😭)
 
-> validations using Zod
-> rate limiter
-> provides refresh token 
-> and so on, I can't think of any rn fr fr
+* validations using Zod
+* rate limiter
+* provides refresh token 
+* and so on, I can't think of any rn fr fr
 
 ## Feed me some suggestions ( make an issue huhu ) 🥺😞😭
