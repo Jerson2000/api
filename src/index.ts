@@ -4,6 +4,8 @@ import rootRouter from './routes';
 import { errorMiddleWare } from './middlewares/error-middleware';
 import rateLimit from 'express-rate-limit';
 import { APP_PORT } from './utils/env-utils';
+import headerCacheMiddleware from './middlewares/cache-headers-middleware';
+import cacheMiddleware from './middlewares/memory-cache-middleware';
 
 const app = express();
 AppDataSource.initialize()
@@ -22,7 +24,8 @@ AppDataSource.initialize()
         app.use('/uploads/', express.static('uploads'));
 
         app.use(express.json())
-
+        app.use(headerCacheMiddleware)
+        app.use(cacheMiddleware);
         app.use('/api', rootRouter)
         app.use(errorMiddleWare)
 

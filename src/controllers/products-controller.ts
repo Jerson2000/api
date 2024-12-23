@@ -2,7 +2,7 @@ import { CustomRequest } from "../model/types"
 import { Response } from "express"
 import { ProductRepository } from "../repository/products-repository";
 import { BadRequestException } from "../exceptions/http-exception";
-import { ProductsValidation } from "../exceptions/validations";
+import { addProductCategoryValidation, ProductsValidation } from "../exceptions/validations";
 
 
 const repo = new ProductRepository();
@@ -42,4 +42,10 @@ export const addProductImages = async (req: CustomRequest, res: Response) => {
 
     const promise = await repo.addProductImages(parseInt(req.params.id), uploadedFiles);
     res.json(promise);
+}
+
+export const addProductCategory = async (req: CustomRequest, res: Response) => {
+    addProductCategoryValidation.parse(req.body)
+    const save = await repo.addProductCategory(parseInt(req.params.id), req.body.categories);
+    res.json(save);
 }

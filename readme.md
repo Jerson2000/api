@@ -22,5 +22,5 @@
 
 * ~validations using Zod~
 * ~rate limiter~
-* Memory Caching with node-cache
+* ~Memory Caching with node-cache~
 * and so on, I can't think of any rn fr fr

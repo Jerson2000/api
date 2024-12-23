@@ -3,8 +3,9 @@ import { Products } from "../model/products-entity";
 import { ProductImages } from "../model/product_images-entity";
 import { ProductCategory } from "../model/product_category-entity";
 import { AppDataSource } from "../config/db-config";
-import { IProductImages, IProducts } from "../model/types";
+import { ICategory, IProductCategories, IProductImages, IProducts } from "../model/types";
 import { BadRequestException, NotFoundException } from "../exceptions/http-exception";
+import { encodeXText } from "nodemailer/lib/shared";
 
 
 
@@ -41,24 +42,24 @@ export class ProductRepository {
     }
 
     async getProduct(productId: number): Promise<IProducts> {
-        const x = await this.productRepo.findOneBy({
+        const get = await this.productRepo.findOneBy({
             id: productId
         })
-        if (!x) {
+        if (!get) {
             throw new NotFoundException("Product not found!");
         }
-        return x;
+        return get;
     }
 
 
-    async addProductImages(pId: number, images: IProductImages[]): Promise<IProductImages[] | any> {
-      
+    async addProductImages(productId: number, images: IProductImages[]): Promise<IProductImages[] | any> {
+
         if (!images && images.length === 0) {
             throw new BadRequestException("Provide the product images!");
         }
 
         const p = await this.productRepo.findOneBy({
-            id: pId
+            id: productId
         })
 
         if (!p) {
@@ -73,6 +74,24 @@ export class ProductRepository {
 
         const pImages = await this.imagesRepo.save(updatedImagesFiles);
         return pImages;
+    }
+
+    async addProductCategory(productId: number, categories: ICategory[]): Promise<IProductCategories[]> {      
+        const product = await this.productRepo.findOneBy({ id: productId });
+        if (!product) {
+            throw new NotFoundException("Product not found!");
+        }
+    
+        const productCategories: IProductCategories[] = categories.map((category: ICategory) => {
+            return {
+                product: product,
+                category: category
+            };
+        });
+    
+        const save = await this.categoriesRepo.save(productCategories);
+        
+        return save;
     }
 
 }

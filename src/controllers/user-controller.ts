@@ -2,7 +2,6 @@ import { CustomRequest } from "../model/types"
 import { Response } from "express"
 import { UserRepository } from "../repository/users-repository"
 import { UserValidation } from "../exceptions/validations";
-import { redis } from "../utils/redis-cache-utils";
 
 const repo = new UserRepository();
 
